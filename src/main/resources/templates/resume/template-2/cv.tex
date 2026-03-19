@@ -1,0 +1,200 @@
+% !TeX spellcheck = en_GB
+% !TeX program = pdflatex
+%
+% LuxSleek-CV 1.1 LaTeX template
+% Author: Andreï V. Kostyrka, University of Luxembourg
+%
+% Adapted for Open-Portfolio dynamic resume generation.
+% All hardcoded data replaced with Thymeleaf expressions.
+%
+
+\documentclass[11pt, a4paper]{article} 
+
+\usepackage[T1]{fontenc}     % We are using pdfLaTeX,
+\usepackage[utf8]{inputenc}  % hence this preparation
+\usepackage[british]{babel}  
+\usepackage[left = 0mm, right = 0mm, top = 0mm, bottom = 0mm]{geometry}
+\usepackage[stretch = 25, shrink = 25, tracking=true, letterspace=30]{microtype}  
+\usepackage{graphicx}        % To insert pictures
+\usepackage{xcolor}          % To add colour to the document
+\usepackage{marvosym}        % Provides icons for the contact details
+
+\usepackage{enumitem}        % To redefine spacing in lists
+\setlist{parsep = 0pt, topsep = 0pt, partopsep = 1pt, itemsep = 1pt, leftmargin = 6mm}
+
+\usepackage{FiraSans}        % Change this to use any font, but keep it simple
+\renewcommand{\familydefault}{\sfdefault}
+
+\definecolor{cvblue}{HTML}{304263}
+
+%%%%%%% USER COMMAND DEFINITIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% These are the real workhorses of this template
+\newcommand{\dates}[1]{\hfill\mbox{\textbf{#1}}} % Bold stuff that doesn't got broken into lines
+\newcommand{\is}{\par\vskip.5ex plus .4ex} % Item spacing
+\newcommand{\smaller}[1]{{\small$\diamond$\ #1}}
+\newcommand{\headleft}[1]{\vspace*{3ex}\textsc{\textbf{#1}}\par%
+    \vspace*{-1.5ex}\hrulefill\par\vspace*{0.7ex}}
+\newcommand{\headright}[1]{\vspace*{1.0ex}\textsc{\Large\color{cvblue}#1}\par%
+     \vspace*{-2.5ex}{\color{cvblue}\hrulefill}\par\vspace*{0.5ex}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[colorlinks = true, urlcolor = white, linkcolor = white]{hyperref}
+
+\begin{document}
+
+% Style definitions -- killing the unnecessary space and adding the skips explicitly
+\setlength{\topskip}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\fboxsep}{0pt}
+\pagestyle{empty}
+\raggedbottom
+
+\begin{minipage}[t]{0.33\textwidth} %% Left column -- outer definition
+%  Left column -- top dark rectangle
+\colorbox{cvblue}{\begin{minipage}[t][5mm][t]{\textwidth}\null\hfill\null\end{minipage}}
+
+\vspace{-.2ex} % Eliminates the small gap
+\colorbox{cvblue!90}{\color{white}  %% LEFT BOX
+\kern0.09\textwidth\relax% Left margin provided explicitly
+\begin{minipage}[t][293mm][t]{0.82\textwidth}
+\raggedright
+\vspace*{2.5ex}
+
+
+% Profile picture (only shown if uploaded)
+[# th:if="${resume.profile != null and resume.profile.profilePicData != null}"]
+\null\hfill\includegraphics[width=0.65\textwidth]{profile_pic.[(${profilePicExt})]}\hfill\null
+[/]
+
+\vspace*{1.25ex} % Extra space after the picture
+
+
+% Full Name + Headline (About) directly below
+\begin{center}\Large \textbf{[(${resume.user.fullName})]}\normalsize\\
+[# th:if="${resume.profile != null and resume.profile.headline != null and !resume.profile.headline.isEmpty()}"]
+\vspace*{0.4ex}{\small\textit{[(${resume.profile.headline})]}}\\[0.2ex]
+[/]
+\end{center}
+
+% Profile / Bio Section
+[# th:if="${resume.profile != null and resume.profile.bio != null and !resume.profile.bio.isEmpty()}"]
+\headleft{About}
+\smaller{[(${resume.profile.bio})]}
+[/]
+
+% Contact Details Section
+\headleft{Contact details}
+\small % To fit more content
+[# th:if="${resume.user.email != null and !resume.user.email.isEmpty()}"]
+\MVAt\ {\small [(${resume.user.email})]} \\[0.4ex]
+[/]
+[# th:if="${resume.profile != null and resume.profile.phone != null and !resume.profile.phone.isEmpty()}"]
+\Mobilefone\ [(${resume.profile.phone})] \\[0.5ex]
+[/]
+[# th:if="${resume.profile != null and resume.profile.github != null and !resume.profile.github.isEmpty()}"]
+\Mundus\ \href{[(${resume.profile.github})]}{[(${resume.profile.github})]} \\[0.1ex]
+[/]
+[# th:if="${resume.profile != null and resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()}"]
+\Mundus\ \href{[(${resume.profile.linkedin})]}{[(${resume.profile.linkedin})]} \\[0.1ex]
+[/]
+[# th:if="${resume.profile != null and resume.profile.website != null and !resume.profile.website.isEmpty()}"]
+\Mundus\ \href{[(${resume.profile.website})]}{[(${resume.profile.website})]} \\[0.1ex]
+[/]
+[# th:if="${resume.profile != null and resume.profile.location != null and !resume.profile.location.isEmpty()}"]
+\Letter\ [(${resume.profile.location})]
+[/]
+\normalsize
+
+% (Headline moved under name above)
+
+% (Skills moved to right/main column)
+
+% Certifications Section (left column)
+[# th:if="${resume.certifications != null and !resume.certifications.isEmpty()}"]
+\headleft{Certifications}
+\begin{itemize}
+[# th:each="cert : ${resume.certifications}"]
+\item \textbf{[(${cert.name})]}[# th:if="${cert.issuer != null and !cert.issuer.isEmpty()}"], [(${cert.issuer})][/][# th:if="${cert.issueDate != null and !cert.issueDate.isEmpty()}"] -- [(${cert.issueDate})][/]
+[/]
+\end{itemize}
+[/]
+
+\end{minipage}%
+\kern0.09\textwidth\relax%%Right margin provided explicitly to stretch the colourbox
+}
+\end{minipage}% Right column
+\hskip2.5em% Left margin for the white area
+\begin{minipage}[t]{0.56\textwidth}
+\setlength{\parskip}{0.8ex}% Adds spaces between paragraphs
+
+\vspace{2ex}
+
+% Experience Section
+[# th:if="${resume.experiences != null and !resume.experiences.isEmpty()}"]
+\headright{Experience}
+
+[# th:each="exp : ${resume.experiences}"]
+{\setlength{\parskip}{0pt}%
+\textsc{[(${exp.jobTitle})]} at \textit{[(${exp.company})][# th:if="${exp.location != null and !exp.location.isEmpty()}"] ([(${exp.location})])[/]}  \dates{[(${exp.startDate})] -- [(${exp.current ? 'Present' : exp.endDate})]} \\[-0.2ex]
+[# th:if="${exp.description != null and !exp.description.isEmpty()}"]
+[# th:each="line : ${#strings.arraySplit(#strings.replace(#strings.replace(#strings.replace(exp.description, '•', '@'), '·', '@'), '●', '@'), '@')}"]
+[# th:if="${!line.trim().isEmpty()}"]\smaller{[(${line.trim()})]} \\[-0.2ex][/]
+[/]
+[/]
+}
+\is
+[/]
+[/]
+
+% Education Section
+[# th:if="${resume.educations != null and !resume.educations.isEmpty()}"]
+\headright{Education}
+
+[# th:each="edu : ${resume.educations}"]
+{\setlength{\parskip}{0pt}%
+\textsc{[(${edu.degree})][# th:if="${edu.fieldOfStudy != null and !edu.fieldOfStudy.isEmpty()}"] in [(${edu.fieldOfStudy})][/]} \\[-0.3ex]
+\textit{[(${edu.institution})]} \dates{[(${edu.startYear})] -- [(${edu.endYear})]} \\[-0.2ex]
+[# th:if="${edu.description != null and !edu.description.isEmpty()}"]
+{\small\smaller{[(${edu.description})]}} \\[-0.2ex]
+[/]
+[# th:if="${edu.grade != null and !edu.grade.isEmpty()}"]
+{\small\smaller{Grade: [(${edu.grade})]}}
+[/]
+}
+\is
+[/]
+[/]
+
+% Projects Section
+[# th:if="${resume.projects != null and !resume.projects.isEmpty()}"]
+\headright{Projects}
+
+[# th:each="proj : ${resume.projects}"]
+{\setlength{\parskip}{0pt}%
+\textbf{[(${proj.name})]}[# th:if="${proj.techStack != null and !proj.techStack.isEmpty()}"] $|$ \textit{[(${proj.techStack})]}[/][# th:if="${proj.projectUrl != null and !proj.projectUrl.isEmpty()}"] \dates{\href{[(${proj.projectUrl})]}{Link}}[/] \\[-0.2ex]
+[# th:if="${proj.description != null and !proj.description.isEmpty()}"]
+[# th:each="line : ${#strings.arraySplit(#strings.replace(#strings.replace(#strings.replace(proj.description, '•', '@'), '·', '@'), '●', '@'), '@')}"]
+[# th:if="${!line.trim().isEmpty()}"]\smaller{[(${line.trim()})]} \\[-0.2ex][/]
+[/]
+[/]
+}
+\is
+[/]
+[/]
+
+% Skills Section (right/main column)
+[# th:if="${groupedSkills != null and not #maps.isEmpty(groupedSkills)}"]
+\headright{Skills}
+{\footnotesize
+\begin{tabular}{@{}p{0.35\linewidth} p{0.6\linewidth}@{}}
+[# th:each="entry : ${groupedSkills}"]
+\textbf{[(${entry.key})]}: & [# th:each="skill, iterStat : ${entry.value}"][(${skill.name})][# th:if="${skill.level != null and !skill.level.isEmpty()}"]~([(${skill.level})])[/][# th:if="${!iterStat.last}"], [/][/]\\[3pt]
+[/]
+\end{tabular}
+}
+[/]
+
+\end{minipage}
+
+\end{document}
