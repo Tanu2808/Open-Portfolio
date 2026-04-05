@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/dashboard")
+@SuppressWarnings("null")
 public class DashboardController {
 
     private final ProfileService profileService;

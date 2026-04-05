@@ -20,6 +20,7 @@ import com.openportfolio.resume_maker.model.Skill;
 import com.openportfolio.resume_maker.service.LatexService;
 
 @Controller
+@SuppressWarnings("null")
 public class ResumeController {
 
     private final ResumeService resumeService;

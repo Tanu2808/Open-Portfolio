@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/files")
+@SuppressWarnings("null")
 public class FileController {
 
     private final ProfileRepository profileRepository;
