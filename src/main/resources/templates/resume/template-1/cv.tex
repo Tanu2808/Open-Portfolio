@@ -26,7 +26,7 @@
 %----------------------------------------------------------------------------------------
 
 % article class because we want to fully customize the page and not use a cv template
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,10pt]{article}
 
 %----------------------------------------------------------------------------------------
 %	FONT
@@ -56,7 +56,8 @@
 \RequirePackage{color}
 \RequirePackage{graphicx}
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage[scale=0.9]{geometry}
+\usepackage[margin=0.6in]{geometry}
+\linespread{1.05}
 \usepackage{fontawesome5}
 \usepackage{tabularx}
 
@@ -80,7 +81,7 @@
 %CV Sections inspired by: 
 %http://stefano.italians.nl/archives/26
 \titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule]
-\titlespacing{\section}{0pt}{10pt}{10pt}
+\titlespacing{\section}{0pt}{6pt}{6pt}
 
 %for publications
 \usepackage[style=authoryear,sorting=ynt, maxbibnames=2]{biblatex}
@@ -115,7 +116,7 @@
     \textbf{#1} & \hfill &  #2 \\%
     \end{tabularx}
     \vspace{-10pt}
-    \begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=3pt,label=--]
+    \begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=1.5pt,label=--]
     }
     {
     \end{itemize}
@@ -143,7 +144,7 @@
 
 \begin{center}
     {\Huge [(${resume.user.fullName})]} \\ [5pt]
-    \normalsize{[# th:if="${resume.profile != null and resume.profile.github != null and !resume.profile.github.isEmpty()}"]\href{[(${resume.profile.github})]}{\faGithub\ [(${resume.profile.github.replace('https://github.com/', '')})]} [# th:if="${(resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()) or (resume.profile.website != null and !resume.profile.website.isEmpty()) or (resume.user.email != null and !resume.user.email.isEmpty()) or (resume.profile.phone != null and !resume.profile.phone.isEmpty())}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()}"]\href{[(${resume.profile.linkedin})]}{\faLinkedin\ [(${resume.profile.linkedin.replace('https://www.linkedin.com/in/', '')})]} [# th:if="${(resume.profile.website != null and !resume.profile.website.isEmpty()) or (resume.user.email != null and !resume.user.email.isEmpty()) or (resume.profile.phone != null and !resume.profile.phone.isEmpty())}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.website != null and !resume.profile.website.isEmpty()}"]\href{[(${resume.profile.website})]}{\faGlobe\ [(${resume.profile.website.replace('https://', '').replace('http://', '')})]} [# th:if="${(resume.user.email != null and !resume.user.email.isEmpty()) or (resume.profile.phone != null and !resume.profile.phone.isEmpty())}"] $|$ [/][/][# th:if="${resume.user.email != null and !resume.user.email.isEmpty()}"]\href{mailto:[(${resume.user.email})]}{\faEnvelope\ [(${resume.user.email})]} [# th:if="${resume.profile != null and resume.profile.phone != null and !resume.profile.phone.isEmpty()}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.phone != null and !resume.profile.phone.isEmpty()}"]\faMobile\ [(${resume.profile.phone})][/]}
+    \small{[# th:if="${resume.user.email != null and !resume.user.email.isEmpty()}"]\href{mailto:[(${resume.user.email})]}{\faEnvelope\ [(${resume.user.email})]} [# th:if="${(resume.profile.phone != null and !resume.profile.phone.isEmpty()) or (resume.profile.github != null and !resume.profile.github.isEmpty()) or (resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()) or (resume.profile.website != null and !resume.profile.website.isEmpty())}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.phone != null and !resume.profile.phone.isEmpty()}"]\faMobile\ [(${resume.profile.phone})] [# th:if="${(resume.profile.github != null and !resume.profile.github.isEmpty()) or (resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()) or (resume.profile.website != null and !resume.profile.website.isEmpty())}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.github != null and !resume.profile.github.isEmpty()}"]\href{[(${resume.profile.github})]}{\faGithub\ [(${resume.profile.github.replace('https://github.com/', '')})]} [# th:if="${(resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()) or (resume.profile.website != null and !resume.profile.website.isEmpty())}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()}"]\href{[(${resume.profile.linkedin})]}{\faLinkedin\ [(${resume.profile.linkedin.replace('https://www.linkedin.com/in/', '')})]} [# th:if="${resume.profile.website != null and !resume.profile.website.isEmpty()}"] $|$ [/][/][# th:if="${resume.profile != null and resume.profile.website != null and !resume.profile.website.isEmpty()}"]\href{[(${resume.profile.website})]}{\faGlobe\ [(${resume.profile.website.replace('https://', '').replace('http://', '')})]}[/]}
 \end{center}
 
 %----------------------------------------------------------------------------------------
@@ -182,7 +183,7 @@
 [# th:each="proj : ${resume.projects}"]
 \noindent\textbf{[(${proj.name})]} [# th:if="${proj.techStack != null and !proj.techStack.isEmpty()}"]$|$ \textit{[(${proj.techStack})]}[/] \hfill [# th:if="${proj.projectUrl != null and !proj.projectUrl.isEmpty()}"]\href{[(${proj.projectUrl})]}{Link}[/] \\%
 \vspace{-10pt}
-\begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=3pt,label=--]
+\begin{itemize}[nosep,after=\strut, leftmargin=1em, itemsep=1.5pt,label=--]
 [# th:each="line : ${#strings.arraySplit(#strings.replace(#strings.replace(#strings.replace(proj.description, '•', '@'), '·', '@'), '●', '@'), '@')}"]
 [# th:if="${!line.trim().isEmpty()}"]\item [(${line.trim()})][/]
 [/]
@@ -199,8 +200,7 @@
 \section{Education}
 \begin{tabularx}{\linewidth}{@{}l X r@{}}	
 [# th:each="edu : ${resume.educations}"]
-[(${edu.startYear})] -- [(${edu.endYear})] & [(${edu.degree})] [# th:if="${edu.fieldOfStudy != null and !edu.fieldOfStudy.isEmpty()}"]in [(${edu.fieldOfStudy})][/] \\
- & at \textbf{[(${edu.institution})]} & [# th:if="${edu.grade != null and !edu.grade.isEmpty()}"](Grade: [(${edu.grade})])[/] \\[4pt]
+[(${edu.startYear})] -- [(${edu.endYear})] & [(${edu.degree})][# th:if="${edu.fieldOfStudy != null and !edu.fieldOfStudy.isEmpty()}"] in [(${edu.fieldOfStudy})][/] at \textbf{[(${edu.institution})]} & [# th:if="${edu.grade != null and !edu.grade.isEmpty()}"](Grade: [(${edu.grade})])[/] \\[2pt]
 [/]
 \end{tabularx}
 [/]

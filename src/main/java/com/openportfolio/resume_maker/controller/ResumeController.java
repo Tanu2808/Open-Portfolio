@@ -51,6 +51,11 @@ public class ResumeController {
         try {
             ResumeData data = resumeService.getResumeData(username);
 
+            // Apply Template 1 specific backend limits: 300-350 char bio, max 3 exp bullets, max 2 proj bullets
+            if ("1".equals(template)) {
+                limitBulletsAndBio(data, 3, 2);
+            }
+
             // Sanitize resume data for LaTeX
             sanitizeResumeDataForLatex(data);
 
@@ -166,5 +171,37 @@ public class ResumeController {
                 cert.setCredentialId(latexService.escapeLatex(cert.getCredentialId()));
             });
         }
+    }
+
+    private void limitBulletsAndBio(ResumeData data, int maxExpBullets, int maxProjBullets) {
+        if (data.getProfile() != null && data.getProfile().getBio() != null) {
+            String bio = data.getProfile().getBio();
+            if (bio.length() > 350) {
+                int lastSpace = bio.lastIndexOf(" ", 350);
+                data.getProfile().setBio(bio.substring(0, lastSpace > 0 ? lastSpace : 350) + "...");
+            }
+        }
+        if (data.getExperiences() != null) {
+            data.getExperiences().forEach(exp -> exp.setDescription(trimBullets(exp.getDescription(), maxExpBullets)));
+        }
+        if (data.getProjects() != null) {
+            data.getProjects().forEach(proj -> proj.setDescription(trimBullets(proj.getDescription(), maxProjBullets)));
+        }
+    }
+
+    private String trimBullets(String description, int maxBullets) {
+        if (description == null || description.isEmpty()) return description;
+        String normalized = description.replace("•", "·").replace("●", "·");
+        String[] bullets = normalized.split("·");
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String b : bullets) {
+            if (!b.trim().isEmpty()) {
+                if (count >= maxBullets) break;
+                sb.append("· ").append(b.trim()).append("\n");
+                count++;
+            }
+        }
+        return sb.toString().trim();
     }
 }

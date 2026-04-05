@@ -1,0 +1,108 @@
+\documentclass[10pt,a4paper]{altacv}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{left=1cm,right=9cm,marginparwidth=6.8cm,marginparsep=1.2cm,top=1cm,bottom=0.4cm}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[default]{lato}
+
+\definecolor{VividPurple}{HTML}{2E64FE}
+\definecolor{SlateGrey}{HTML}{2E2E2E}
+\definecolor{LightGrey}{HTML}{666666}
+\colorlet{heading}{VividPurple}
+\colorlet{accent}{VividPurple}
+\colorlet{emphasis}{SlateGrey}
+\colorlet{body}{LightGrey}
+
+\renewcommand{\itemmarker}{{\small\textbullet}}
+\renewcommand{\ratingmarker}{\faCircle}
+
+\renewcommand{\printinfo}[2]{\mbox{\textcolor{accent}{#1}\hspace{0.4em}#2\hspace{0.7em}}}
+
+\begin{document}
+\name{[(${resume.user.fullName != null ? resume.user.fullName : ''})]}
+\tagline{ }
+
+\personalinfo{%
+  \footnotesize
+  [# th:if="${resume.user.email != null and !resume.user.email.isEmpty()}"]\email{\href{mailto:[(${resume.user.email})]}{[(${resume.user.email})]}}[/]
+  [# th:if="${resume.profile != null and resume.profile.phone != null and !resume.profile.phone.isEmpty()}"]\phone{[(${resume.profile.phone})]}[/]
+  [# th:if="${resume.profile != null and resume.profile.linkedin != null and !resume.profile.linkedin.isEmpty()}"]\linkedin{\href{[(${resume.profile.linkedin})]}{[(${resume.profile.linkedin.replace('https://www.linkedin.com/in/', '').replace('www.linkedin.com/in/', '')})]}}[/]
+  [# th:if="${resume.profile != null and resume.profile.github != null and !resume.profile.github.isEmpty()}"]\github{\href{[(${resume.profile.github})]}{[(${resume.profile.github.replace('https://github.com/', '')})]}}[/]
+  [# th:if="${resume.profile != null and resume.profile.website != null and !resume.profile.website.isEmpty()}"]\homepage{\href{[(${resume.profile.website})]}{[(${resume.profile.website.replace('https://', '').replace('http://', '')})]}}[/]
+}
+
+\begin{adjustwidth}{}{-8cm}
+\makecvheader
+
+[# th:if="${resume.profile != null and resume.profile.bio != null and !resume.profile.bio.isEmpty()}"]
+\cvsection{Summary}
+[(${resume.profile.bio})]
+[/]
+\end{adjustwidth}
+
+\marginpar{\vspace*{\dimexpr1pt-\baselineskip}\raggedright
+
+[# th:if="${resume.educations != null and !resume.educations.isEmpty()}"]
+\cvsection{Education}
+[# th:each="edu, iterStat : ${resume.educations}"]
+\cvevent{[(${edu.degree})][# th:if="${edu.fieldOfStudy != null and !edu.fieldOfStudy.isEmpty()}"] in [(${edu.fieldOfStudy})][/]}{[(${edu.institution})]}{[(${edu.startYear})] -- [(${edu.endYear})]}{[# th:if="${edu.grade != null and !edu.grade.isEmpty()}"]Grade: [(${edu.grade})][/]}
+[# th:if="${!iterStat.last}"]\divider[/]
+[/]
+[/]
+
+[# th:if="${groupedSkills != null and not #maps.isEmpty(groupedSkills)}"]
+\cvsection{Skills}
+[# th:each="entry : ${groupedSkills}"]
+\textbf{[(${entry.key})]}
+\begin{itemize}
+[# th:each="skill, iterStat : ${entry.value}"]
+\item [(${skill.name})][# th:if="${skill.level != null and !skill.level.isEmpty()}"] ([(${skill.level})])[/]
+[/]
+\end{itemize}
+\smallskip
+[/]
+[/]
+
+
+}
+\cvsection{Experience}
+
+[# th:if="${resume.experiences != null and !resume.experiences.isEmpty()}"]
+[# th:each="exp, iterStat : ${resume.experiences}"]
+\cvevent{[(${exp.jobTitle})]}{[(${exp.company})]}{[(${exp.startDate})] -- [(${exp.current ? 'Present' : exp.endDate})]}{}
+[# th:if="${exp.description != null and !exp.description.isEmpty()}"]
+\begin{itemize}
+[# th:each="line : ${#strings.arraySplit(#strings.replace(#strings.replace(#strings.replace(exp.description, '•', '@'), '·', '@'), '●', '@'), '@')}"]
+[# th:if="${!line.trim().isEmpty()}"]\item [(${line.trim()})][/]
+[/]
+\end{itemize}
+[/]
+[# th:if="${!iterStat.last}"]
+\divider
+[/]
+[/]
+[/]
+
+[# th:if="${resume.projects != null and !resume.projects.isEmpty()}"]
+\cvsection{Projects}
+
+[# th:each="proj, iterStat : ${resume.projects}"]
+\cvevent{[(${proj.name})]}{[(${proj.techStack != null ? proj.techStack : ''})]}{}{}
+[# th:if="${proj.description != null and !proj.description.isEmpty()}"]
+\begin{itemize}
+[# th:each="line : ${#strings.arraySplit(#strings.replace(#strings.replace(#strings.replace(proj.description, '•', '@'), '·', '@'), '●', '@'), '@')}"]
+[# th:if="${!line.trim().isEmpty()}"]\item [(${line.trim()})][/]
+[/]
+\end{itemize}
+[/]
+[# th:if="${!iterStat.last}"]
+\divider
+[/]
+[/]
+[/]
+
+\clearpage
+
+\end{document}
